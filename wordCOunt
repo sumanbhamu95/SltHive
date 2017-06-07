@@ -1,0 +1,14 @@
+create table input(line string);
+
+
+
+load data local inpath '/home/hduser/aa' overwrite into table input;
+
+
+
+ select explode(split(line,',')) as word from input;
+
+
+
+
+ select word,count(*) as count from (select explode(split(line,' '))as word from input)a group by word;
