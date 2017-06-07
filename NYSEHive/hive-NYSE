@@ -1,0 +1,28 @@
+use nyse data
+
+
+
+create table nyseta(nyse string,stockname string,nydate string,uprate float,downrate float,ssin float,ssout float,strate bigint,rate float) row format delimited fields terminated by ',';
+
+
+
+load data local inpath '/home/hduser/NYSE.txt' overwrite into table nyseta;
+
+
+1.to find total stock volume for each stock
+
+select stockname,sum(strate) from nyseta group by stockname;
+
+
+
+2.to find max variance for each stock
+
+select stockname,max(((downrate-ssin)/ssin)*100) from nyseta group by stockname;
+
+
+
+
+for the above result please save the output on hdfs
+
+insert overwrite directory '/user/hadoop/outnyse' row format delimited fields terminated by ','
+select stockname,max((downrate-ssin)*100) from nyseta group by stockname;
